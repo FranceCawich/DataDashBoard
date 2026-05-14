@@ -1,3 +1,17 @@
+/* Prevent horizontal scroll and hide scrollbar */
+html, body, #root {
+  width: 100%;
+  overflow-x: hidden !important;
+}
+
+/* Hide scrollbar for all browsers */
+body::-webkit-scrollbar {
+  display: none;
+}
+body {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;     /* Firefox */
+}
 .counter {
   font-size: 16px;
   padding: 5px 10px;
