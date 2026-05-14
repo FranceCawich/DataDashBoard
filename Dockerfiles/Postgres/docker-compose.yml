@@ -1,0 +1,31 @@
+services:
+  db:
+    image: postgres18:v1
+    container_name: postgres_db18
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: test
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - "5437:5432"
+    networks:
+      - db_network
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin_ui
+    restart: always
+    environment:
+       PGADMIN_DEFAULT_EMAIL: admin@example.com # Your login for the web UI
+       PGADMIN_DEFAULT_PASSWORD: adminpassword # Your password for the web UI
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
+    networks:
+      - db_network
+
+networks:
+  db_network:
+    driver: bridge
