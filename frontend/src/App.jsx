@@ -8,10 +8,11 @@ import { CSVPanel } from './components/Panels/CSVPanel';
 export default function App() {
   const [isDark, setIsDark] = useState(false);
   const [source, setSource] = useState('db');
+  const [sidebarOpen, setSidebarOpen] = useState(true);
   const t = makeTokens(isDark);
 
   const sources = [
-    { id: 'db', icon: '⬡', label: 'Database', desc: 'MySQL, PostgreSQL, SQLite' },
+    { id: 'db', icon: '⬡', label: 'DATABASE', desc: 'MySQL, PostgreSQL, SQLite' },
     { id: 'json', icon: '{ }', label: 'JSON', desc: 'Upload or paste' },
     { id: 'csv', icon: '≡', label: 'CSV', desc: 'Delimited text files' },
   ];
@@ -47,14 +48,31 @@ export default function App() {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          padding: '0 32px',
+          padding: '0 16px',
           height: 52,
           borderBottom: `1px solid ${t.border}`,
           background: t.surface,
           flexShrink: 0,
         }}>
+          {/* Sidebar toggle */}
+          <button
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+            style={{
+              padding: '6px 10px',
+              background: 'transparent',
+              border: `1px solid ${t.border}`,
+              borderRadius: 4,
+              color: t.textMuted,
+              cursor: 'pointer',
+              fontSize: 14,
+              fontFamily: "'DM Mono', monospace",
+              letterSpacing: '0.06em',
+              transition: 'all .15s',
+            }}
+          >{sidebarOpen ? '«' : '»'}</button>
+
           {/* Wordmark */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 14, flex: 1, marginLeft: 24 }}>
             <div style={{
               width: 28, height: 28,
               background: t.blue,
@@ -75,14 +93,7 @@ export default function App() {
               padding: '2px 7px',
               borderRadius: 3,
               fontFamily: "'DM Mono', monospace",
-            }}>v2</div>
-          </div>
-
-          {/* Nav tabs */}
-          <div style={{ display: 'flex', height: '100%', alignItems: 'stretch' }}>
-            {sources.map(s => (
-              <NavTab key={s.id} {...s} active={source === s.id} onClick={() => setSource(s.id)} />
-            ))}
+            }}>v1</div>
           </div>
 
           {/* Theme toggle */}
@@ -103,11 +114,64 @@ export default function App() {
           >{isDark ? '◑ Light' : '◐ Dark'}</button>
         </div>
 
-        {/* ── Main content ── */}
+        {/* ── Main layout with sidebar ── */}
         <div style={{ flex: 1, display: 'flex', overflow: 'hidden' }}>
-          {source === 'db' && <DBPanel />}
-          {source === 'json' && <JSONPanel />}
-          {source === 'csv' && <CSVPanel />}
+          {/* Sidebar */}
+          {sidebarOpen && (
+            <div style={{
+              width: 200,
+              borderRight: `1px solid ${t.border}`,
+              background: t.sidebar,
+              padding: '24px 0',
+              overflowY: 'auto',
+              flexShrink: 0,
+              transition: 'all .3s',
+            }}>
+              <div style={{ padding: '0 16px', marginBottom: 24 }}>
+                <div style={{
+                  fontSize: 10,
+                  fontWeight: 700,
+                  letterSpacing: '0.1em',
+                  textTransform: 'uppercase',
+                  color: t.textMuted,
+                  fontFamily: "'DM Mono', monospace",
+                }}>Sources</div>
+              </div>
+              {sources.map(s => (
+                <button
+                  key={s.id}
+                  onClick={() => setSource(s.id)}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 10,
+                    width: '100%',
+                    textAlign: 'left',
+                    padding: '12px 16px',
+                    fontSize: 13,
+                    fontFamily: "'DM Sans', sans-serif",
+                    cursor: 'pointer',
+                    border: 'none',
+                    borderLeft: source === s.id ? `3px solid ${t.blue}` : '3px solid transparent',
+                    background: source === s.id ? t.blueBg : 'transparent',
+                    color: source === s.id ? t.blue : t.textMuted,
+                    transition: 'all .15s',
+                    fontWeight: source === s.id ? 600 : 400,
+                  }}
+                >
+                  <div style={{ fontSize: 16, flexShrink: 0 }}>{s.icon}</div>
+                  <div>{s.label}</div>
+                </button>
+              ))}
+            </div>
+          )}
+
+          {/* Main content */}
+          <div style={{ flex: 1, display: 'flex', overflow: 'hidden' }}>
+            {source === 'db' && <DBPanel />}
+            {source === 'json' && <JSONPanel />}
+            {source === 'csv' && <CSVPanel />}
+          </div>
         </div>
       </div>
     </ThemeCtx.Provider>

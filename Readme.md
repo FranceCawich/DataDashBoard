@@ -134,6 +134,19 @@ http://localhost:5173
 ```
 
 ---
+# ⚙️ Database Configurations Docker (Postgres)
+## Build the Image for Postgres 
+
+```bash
+docker build -it postgres:v1 .
+```
+## Run the container
+```bash
+docker compose up 
+```
+## Connet to the database via PGAdmin or any Cliente of your choice 
+
+
 
 # 📂 Supported Data Sources
 
@@ -151,6 +164,7 @@ http://localhost:5173
 - React
 - Vite
 - JavaScript / TypeScript
+- Docker 
 
 ## Backend
 
